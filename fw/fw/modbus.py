@@ -1,6 +1,7 @@
 Registers = {
     # R
     "MOTION_SENSOR": 0,
+    "NUMPAD": 1,
 
     # RW
     "LED_RED" : 100,
