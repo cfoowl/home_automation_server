@@ -9,6 +9,7 @@ class Device(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
+    ip = Column(String, nullable=False)
     type = Column(String, nullable=False)
     device_metadata = Column(JSON, default={})
     registered_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
