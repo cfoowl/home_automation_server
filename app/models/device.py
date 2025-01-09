@@ -3,6 +3,9 @@ from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from app.config.settings import Base
 from datetime import datetime
+from app.models.sensor_data import SensorData
+from app.models.device_action import DeviceAction
+from app.models.device_log import DeviceLog
 
 class Device(Base):
     __tablename__ = "device"
