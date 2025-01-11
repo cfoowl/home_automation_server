@@ -4,7 +4,8 @@ from app.core.dependencies import get_db
 from app.api.endpoints.device_endpoints import *
 from app.api.endpoints.detected_device_endpoints import *
 from app.api.endpoints.sensor_data_endpoints import *
-from app.api.endpoints.device_actions import *
+from app.api.endpoints.device_actions_endpoints import *
+from app.api.endpoints.device_logs_endpoints import *
 
 router = APIRouter()
 
@@ -61,3 +62,9 @@ def get_actions(device_id: int, db: Session = Depends(get_db)):
 @router.post("/devices/actions/{action_id}")
 def post_action(action_id: int, db: Session = Depends(get_db)):
     pass
+
+
+# Device logs
+@router.get("/devices/{device_id}/logs/{limit}")
+def get_logs(device_id: int, limit: int = 100, db: Session = Depends(get_db)):
+    return get_device_logs_by_id_endpoint(db=db, device_id=device_id, limit=limit)
