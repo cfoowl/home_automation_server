@@ -13,9 +13,11 @@ router = APIRouter()
 @router.get("/detected-devices")
 def get_detected_devices(db: Session = Depends(get_db)):
     return get_all_detected_devices_endpoint(db=db)
+
 @router.post("/detected-devices/scan")
-def scan_new_devices():
-    pass
+def scan_new_devices(db: Session = Depends(get_db)):
+    return start_new_scan_endpoint(db=db)
+
 @router.delete("/detected-devices/{detected_device_id}")
 def delete_detected_device(detected_device_id: int, db: Session = Depends(get_db)):
     return delete_detected_device_by_id_endpoint(db=db, detected_device_id=detected_device_id)
