@@ -3,6 +3,9 @@ import re
 from sqlalchemy.orm import Session
 from app.models.detected_device import DetectedDevices
 from app.models.device import Device
+from app.services.modbus import Client
+
+scan_client_list = dict()
 
 def filter_mac_addresses(string: str) -> bool:
     mac_regex = re.compile(r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$')
@@ -68,22 +71,35 @@ def is_registered_Device_by_ip(db : Session, ip : str) -> bool:
     return db.query(Device).filter(Device.ip == ip).first() is not None
 
 def create_detected_device_entry(db: Session, ip : str):
-    new_detected_device = DetectedDevices(ip=ip, type="test", device_metadata = {})
+    global scan_client_list
+    client_type = str()
+    for sensor in scan_client_list[ip].sensors:
+        client_type += sensor.type + " | "
+    client_type = client_type[:-3]
+
+    new_detected_device = DetectedDevices(ip=ip, type=client_type, device_metadata = {})
     db.add(new_detected_device)
     db.commit()
     db.refresh(new_detected_device)
 
 def scan_devices(db : Session):
+    global scan_client_list
+    scan_client_list = dict()
+
     clients_hostapd = get_connected_clients()
     dhcp_leases = get_dhcp_leases()
 
     db.query(DetectedDevices).delete()
     db.commit()
-    print(db.query(DetectedDevices).all())
-    print("DetectedDevices table rows have been deleted")
     
+    detected_device_ind = 0
     for mac_address in clients_hostapd:
         ip = dhcp_leases[mac_address]["ip"]
+        scan_client_list |= {ip : Client(ip)}
+        print(scan_client_list[ip])
         if (not is_registered_Device_by_ip(db = db, ip = ip)):
             create_detected_device_entry(db = db, ip = ip)
+            detected_device_ind += 1
+    print(scan_client_list)
+    return detected_device_ind
 

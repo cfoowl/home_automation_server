@@ -23,20 +23,19 @@ def add_client_to_list(client_list: dict, ip: str):
 
 def sensor_polling():
     global client_list 
-    local_client_list = client_list.copy()
     
     while True:
         db_generator = get_db()
         db = next(db_generator)
         try:
+            local_client_list = client_list.copy()
             for client_ip in local_client_list:
-                print(client_ip)
                 client = local_client_list[client_ip]
                 device_id = db.query(Device).filter(Device.ip == client_ip).first().id
                 for sensor in client.sensors:
                     sensor_type = sensor.type
                     value = client.read_register(sensor.type)
-                    new_data = SensorData(device_id=device_id, data_type=sensor_type, value=value)
+                    new_data = SensorData(device_id=device_id, sensor_type=sensor_type, value=value[0])
                     db.add(new_data)
                     db.commit()
                     db.refresh(new_data)

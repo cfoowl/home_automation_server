@@ -1,10 +1,17 @@
 from sqlalchemy.orm import Session
 from app.models.device import Device
 from app.models.detected_device import DetectedDevices
+from app.core.modbus_thread import client_list
+from app.services.modbus import Client
 
 def create_device_endpoint(db: Session, detected_device_id: int, name: str):
     detected_device = db.query(DetectedDevices).filter(DetectedDevices.id == detected_device_id).first()
-    new_device = Device(name=name, ip=detected_device.ip, type=detected_device.type, device_metadata=detected_device.device_metadata)
+    ip = detected_device.ip
+    new_device = Device(name=name, ip=ip, type=detected_device.type, device_metadata=detected_device.device_metadata)
+    
+    global client_list
+    client_list |= {ip : Client(ip)}
+
     db.add(new_device)
     db.commit()
     db.refresh(new_device)
