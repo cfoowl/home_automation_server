@@ -1,17 +1,18 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from app.core.dependencies import get_db
+from app.core.dependencies import get_db, get_current_user
 from app.api.endpoints.device_endpoints import *
 from app.api.endpoints.detected_device_endpoints import *
 from app.api.endpoints.sensor_data_endpoints import *
 from app.api.endpoints.device_actions_endpoints import *
 from app.api.endpoints.device_logs_endpoints import *
+from app.api.endpoints.user_endpoints import *
 
 router = APIRouter()
 
 # Detected Devices
 @router.get("/detected-devices")
-def get_detected_devices(db: Session = Depends(get_db)):
+def get_detected_devices(db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     return get_all_detected_devices_endpoint(db=db)
 
 @router.post("/detected-devices/scan")
@@ -62,3 +63,13 @@ def post_action(device_id: int, action_id: int, db: Session = Depends(get_db)):
 @router.get("/devices/{device_id}/logs/{limit}")
 def get_logs(device_id: int, limit: int = 100, db: Session = Depends(get_db)):
     return get_device_logs_by_id_endpoint(db=db, device_id=device_id, limit=limit)
+
+# Authentification
+
+@router.post("/login")
+def login(username: str, password: str, db: Session = Depends(get_db)):
+    return login_endpoint(username=username, password=password, db = db)
+
+@router.post("/users")
+def create_user(username: str, password: str, is_admin: bool, db: Session = Depends(get_db)):
+    return create_user_endpoint(username=username, password=password, is_admin=is_admin, db=db)
