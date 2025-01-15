@@ -17,7 +17,7 @@
 # # Allume la LED
 # clients[ip].write_register("LED_GREEN", 1)
 #
-# # Affiche la valeur du détécteur de mouvement
+# # Affiche la valeur du détecteur de mouvement
 # print(clients[ip].read_register("MOTION_SENSOR"))
 
 from pyModbusTCP.client import ModbusClient
