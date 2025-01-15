@@ -33,6 +33,29 @@ Registers = {
     "BUZZER" : 102,
 }
 
+class Action:
+    def __init__(self, command_name: str, sensor_type : str, value : int):
+        self.command_name = command_name
+        self.sensor_type = sensor_type
+        self.value = value
+    def __repr__(self):
+        ret = f"{self.command_name} : {self.sensor_type} : {self.value}"
+        return ret
+
+
+Actions = {
+    "LED_RED" : [
+            Action("Turn On Led Red", "LED_RED", 1),
+            Action("Turn Off Led Red", "LED_RED", 0)
+        ],
+    "LED_GREEN" : [
+            Action("Turn On Led Green", "LED_GREEN", 1),
+            Action("Turn Off Led Green", "LED_GREEN", 0)
+        ],
+}
+
+
+
 # Récupère la clé à partir de la valeur du dictionnaire
 def get_register_name(r):
     return list(mydict.keys())[list(mydict.values()).index(r)]
@@ -43,6 +66,7 @@ class Sensor:
 
 class Client:
     sensors = []
+    actions = {}
     def __init__(self, ip):
         self.ip = ip
         self.client = ModbusClient(host=ip, port=502)
@@ -50,9 +74,14 @@ class Client:
             print(f"Error with host or port params for {ip}")
             self.client = None
             return
+        id_action = 0
         for t,v in Registers.items():
             if self.client.read_holding_registers(v, 1):
                 self.sensors.append(Sensor(t))
+                if t in Actions:
+                    for action in Actions[t]:
+                        self.actions[id_action] = action
+                        id_action += 1
 
     def __del__(self):
         if self.client is not None:

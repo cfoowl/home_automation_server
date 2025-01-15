@@ -48,22 +48,14 @@ def update_device(device_id: int, name: str, db: Session = Depends(get_db)):
 def get_sensor_data(device_id: int, limit: int, db: Session = Depends(get_db)):
     return get_last_sensor_data_entries_by_id(db=db, device_id=device_id, limit=limit)
 
-# @router.post("/sensor-data/{data_type}/{device_id}/{value}")
-# def test(device_id: int, data_type: str, value: float, db: Session = Depends(get_db)):
-#     new_data = SensorData(device_id=device_id, data_type=data_type, value=value)
-#     db.add(new_data)
-#     db.commit()
-#     db.refresh(new_data)
-#     return new_data
-
 # Device actions
 @router.get("/devices/{device_id}/actions")
 def get_actions(device_id: int, db: Session = Depends(get_db)):
     return get_device_actions_by_id_endpoint(db=db, device_id=device_id)
 
-@router.post("/devices/actions/{action_id}")
-def post_action(action_id: int, db: Session = Depends(get_db)):
-    pass
+@router.post("/devices/{device_id}/actions/{action_id}")
+def post_action(device_id: int, action_id: int, db: Session = Depends(get_db)):
+    return post_device_actions_by_id_endpoint(db=db, device_id=device_id, action_id=action_id)
 
 
 # Device logs

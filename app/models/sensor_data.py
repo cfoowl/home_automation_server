@@ -9,7 +9,7 @@ class SensorData(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     device_id = Column(Integer, ForeignKey("device.id", ondelete="CASCADE"), nullable=False)
-    data_type = Column(String, nullable=False)
+    sensor_type = Column(String, nullable=False)
     value = Column(Float, nullable=False)
     timestamp = Column(DateTime(timezone=True), server_default=func.now())
     # Relationship

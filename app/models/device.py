@@ -4,7 +4,6 @@ from sqlalchemy.orm import relationship
 from app.config.settings import Base
 from datetime import datetime
 from app.models.sensor_data import SensorData
-from app.models.device_action import DeviceAction
 from app.models.device_log import DeviceLog
 
 class Device(Base):
@@ -19,5 +18,4 @@ class Device(Base):
     last_seen = Column(DateTime(timezone=True), default=datetime.now)
     # Relationships
     sensor_data = relationship("SensorData", back_populates="device", cascade="all, delete")
-    action = relationship("DeviceAction", back_populates="device", cascade="all, delete")
     log = relationship("DeviceLog", back_populates="device", cascade="all, delete")
