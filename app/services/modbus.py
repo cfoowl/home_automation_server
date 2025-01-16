@@ -65,9 +65,9 @@ class Sensor:
         self.type = t
 
 class Client:
-    sensors = []
-    actions = {}
     def __init__(self, ip):
+        self.sensors = []
+        self.actions = {}
         self.ip = ip
         self.client = ModbusClient(host=ip, port=502)
         if not self.client.open():
