@@ -25,6 +25,9 @@ def get_device_by_id_endpoint(db: Session, device_id: int):
 
 def delete_device_by_id_endpoint(db: Session, device_id: int):
     device = db.query(Device).filter(Device.id == device_id).first()
+    global client_list
+    client_list.pop(device.ip)
+
     db.delete(device)
     db.commit()
     return {"message": "Device deleted successfully"}

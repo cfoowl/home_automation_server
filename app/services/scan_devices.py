@@ -95,7 +95,10 @@ def scan_devices(db : Session):
     detected_device_ind = 0
     for mac_address in clients_hostapd:
         ip = dhcp_leases[mac_address]["ip"]
-        scan_client_list |= {ip : Client(ip)}
+        client = Client(ip)
+        if not client.check_health():
+            continue
+        scan_client_list |= {ip : client}
         print(scan_client_list[ip])
         if (not is_registered_Device_by_ip(db = db, ip = ip)):
             create_detected_device_entry(db = db, ip = ip)

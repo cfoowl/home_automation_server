@@ -31,14 +31,19 @@ def sensor_polling():
             local_client_list = client_list.copy()
             for client_ip in local_client_list:
                 client = local_client_list[client_ip]
+                client.open()
                 device_id = db.query(Device).filter(Device.ip == client_ip).first().id
                 for sensor in client.sensors:
-                    sensor_type = sensor.type
-                    value = client.read_register(sensor.type)
-                    new_data = SensorData(device_id=device_id, sensor_type=sensor_type, value=value[0])
-                    db.add(new_data)
-                    db.commit()
-                    db.refresh(new_data)
+                    try :
+                        sensor_type = sensor.type
+                        value = client.read_register(sensor.type)
+                        new_data = SensorData(device_id=device_id, sensor_type=sensor_type, value=value[0])
+                        db.add(new_data)
+                        db.commit()
+                        db.refresh(new_data)
+                    except :
+                        pass
+
         except Exception as e:
             print(f"Modbus thread exception : {e}")
         finally :

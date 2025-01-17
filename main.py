@@ -2,10 +2,18 @@ from fastapi import FastAPI
 from app.api.router import router
 from threading import Thread
 from app.core.modbus_thread import *
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
 app.include_router(router, prefix="/api")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins="*",
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 init_client_list()
 
