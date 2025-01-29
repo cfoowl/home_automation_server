@@ -12,4 +12,5 @@ class Automation(Base):
     actuator_id = Column(Integer, ForeignKey("device.id", ondelete="CASCADE"), nullable=False)
     action_id = Column(Integer, nullable=False)
     # Relationships
-    device = relationship("Device", back_populates="sensor_data")
+    sensor = relationship("Device", foreign_keys=[sensor_id], back_populates="sensor_automation")
+    actuator = relationship("Device", foreign_keys=[actuator_id], back_populates="actuator_automation")

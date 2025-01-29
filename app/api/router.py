@@ -7,6 +7,7 @@ from app.api.endpoints.sensor_data_endpoints import *
 from app.api.endpoints.device_actions_endpoints import *
 from app.api.endpoints.device_logs_endpoints import *
 from app.api.endpoints.user_endpoints import *
+from app.api.endpoints.automation_endpoints import *
 
 router = APIRouter()
 
@@ -74,3 +75,20 @@ def login(username: str, password: str, db: Session = Depends(get_db)):
 @router.post("/users")
 def create_user(username: str, password: str, is_admin: bool, db: Session = Depends(get_db)):
     return create_user_endpoint(username=username, password=password, is_admin=is_admin, db=db)
+
+# Automation
+@router.delete("/automation/{automation_id}")
+def delete_automation(automation_id: int, db: Session = Depends(get_db)):
+    return delete_automation_by_id_endpoint(db=db, automation_id=automation_id)
+
+@router.get("/automations/")
+def get_all_automations(db: Session = Depends(get_db)):
+    return get_all_automations(db=db)
+
+@router.get("/automation/{automation_id}")
+def get_automation_by_id(automation_id = int, db: Session = Depends(get_db)):
+    return get_automation_by_id_endpoint(db=db, automation_id=automation_id)
+
+@router.post("/automation/{sensor_id}/{sensor_type}/{condition_type}/{condition_operator}/{condition_value}/{actuator_id}/{action_id}")
+def create_automation(sensor_id: int, sensor_type: str, condition_type: str, condition_operator: str, condition_value, actuator_id: int, action_id: int, db: Session = Depends(get_db)):
+    return create_automation_endpoint(db=db, sensor_id=sensor_id, sensor_type=sensor_type, condition_type=condition_type, condition_operator=condition_operator, condition_value=condition_value, actuator_id=actuator_id, action_id=action_id)
