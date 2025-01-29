@@ -36,7 +36,11 @@ def sensor_polling():
                 for sensor in client.sensors:
                     try :
                         sensor_type = sensor.type
-                        value = client.read_register(sensor.type)
+                        if sensor_type < 100 :
+                            value = client.read_register(sensor.type)
+                        match sensor_type:
+                            case 1: # Numpad
+                                client.write_register(sensor.type, 0)
                         new_data = SensorData(device_id=device_id, sensor_type=sensor_type, value=value[0])
                         db.add(new_data)
                         db.commit()

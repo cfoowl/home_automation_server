@@ -19,3 +19,4 @@ class Device(Base):
     # Relationships
     sensor_data = relationship("SensorData", back_populates="device", cascade="all, delete")
     log = relationship("DeviceLog", back_populates="device", cascade="all, delete")
+    automation = relationship("Automation", back_populates="device", cascade="all, delete")
