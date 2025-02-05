@@ -21,8 +21,9 @@
 # print(clients[ip].read_register("MOTION_SENSOR"))
 
 
+# Liste de types de registres
 Registers = {
-    # R
+    # RO
     "MOTION_SENSOR": 0,
     "NUMPAD": 1,
     "TEMPERATURE": 2,
@@ -93,7 +94,7 @@ class Client:
     def write_register(self, sensor_type, value):
         return self.client.write_multiple_registers(modbus.Registers[sensor_type], [value])
 
-    # Retorun True si tout est OK, False si la connection est fermé/planté
+    # Retourne True si tout est OK, False si la connection est fermé/planté
     def check_health(self):
         if self.client is None:
             return False

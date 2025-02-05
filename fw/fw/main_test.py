@@ -4,6 +4,9 @@ import time
 from umodbus.tcp import ModbusTCP
 import modbus
 
+## ## ## ## ## ## ## ##
+## Connexion au WiFi ##
+## ## ## ## ## ## ## ##
 sta_if = network.WLAN(network.WLAN.IF_STA)
 
 def do_connect():
@@ -27,8 +30,12 @@ if local_ip == "0.0.0.0":
 
 
 local_ip = sta_if.ifconfig()[0]
-tcp_port = 502      # port to listen for requests/providing data
 
+
+## ## ## ## ## ## ## ## ## ## ##
+## Création du serveur ModBus ##
+## ## ## ## ## ## ## ## ## ## ##
+tcp_port = 502      # port to listen for requests/providing data
 client = ModbusTCP()
 
 # check whether client has been bound to an IP and a port
@@ -49,20 +56,19 @@ client.add_hreg(
     on_get_cb=get_cb
 )
 
+
+## ## ## ## ## ## ## ## ## ## ## ##
+## Exemple de boucle applicative ##
+## ## ## ## ## ## ## ## ## ## ## ##
 while True:
     try:
         led = machine.Pin(2, machine.Pin.OUT)
         led2 = machine.Pin(5, machine.Pin.OUT)
         while True:
-            led.value(0)
             led2.value(client.get_hreg(modbus.Registers["LED_GREEN"]))
-            time.sleep(1)
-            result = client.process()
             led.value(client.get_hreg(modbus.Registers["LED_RED"]))
-            led2.value(0)
-            time.sleep(1)
+            time.sleep(0.1)
             result = client.process()
-
     except KeyboardInterrupt:
         print(local_ip)
     except Exception as e:
