@@ -71,16 +71,16 @@ p1 = machine.Pin(13, machine.Pin.OUT) # 1
 #        -4- -3- -2- -1-
 
 # Leds
-#lg = machine.Pin(5, machine.Pin.OUT)
-#lr = machine.Pin(4, machine.Pin.OUT)
+lg = machine.Pin(5, machine.Pin.OUT)
+lr = machine.Pin(4, machine.Pin.OUT)
 
 def validate():
     print(passin)
     if passin == CODE:
-        client.set_hreg(modbus.Registers["MOTION_SENSOR"], 1)
+        client.set_hreg(modbus.Registers["NUMPAD"], 1)
         lg.value(1)
     else:
-        client.set_hreg(modbus.Registers["MOTION_SENSOR"], 0)
+        client.set_hreg(modbus.Registers["NUMPAD"], 0)
         lr.value(1)
 
     time.sleep(0.5)
@@ -129,24 +129,28 @@ while True:
         p2.value(0)
         p3.value(0)
         p4.value(0)
+        # time.sleep(0.01)
         read_column(3)
             
         p1.value(0)
         p2.value(1)
         p3.value(0)
         p4.value(0)
+        # time.sleep(0.01)
         read_column(2)
             
         p1.value(0)
         p2.value(0)
         p3.value(1)
         p4.value(0)
+        # time.sleep(0.01)
         read_column(1)
             
         p1.value(0)
         p2.value(0)
         p3.value(0)
         p4.value(1)
+        # time.sleep(0.01)
         read_column(0)
 
         if sum(sum(r) for r in buttons) > 1:
@@ -155,6 +159,8 @@ while True:
 
         for r in range(len(buttons)):
             for c in range(len(buttons[r])):
+                # if buttons[r][c]:
+                    # print(buttons_str[r][c], end="")
                 if buttons[r][c] and not old_buttons[r][c]:
                     if buttons_str[r][c] == "#":
                         validate()

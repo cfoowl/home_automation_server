@@ -54,13 +54,9 @@ while True:
         led = machine.Pin(2, machine.Pin.OUT)
         led2 = machine.Pin(5, machine.Pin.OUT)
         while True:
-            led.value(0)
             led2.value(client.get_hreg(modbus.Registers["LED_GREEN"]))
-            time.sleep(1)
-            result = client.process()
             led.value(client.get_hreg(modbus.Registers["LED_RED"]))
-            led2.value(0)
-            time.sleep(1)
+            time.sleep(0.1)
             result = client.process()
 
     except KeyboardInterrupt:

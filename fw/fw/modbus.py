@@ -25,11 +25,14 @@ Registers = {
     # R
     "MOTION_SENSOR": 0,
     "NUMPAD": 1,
+    "TEMPERATURE": 2,
 
     # RW
     "LED_RED" : 100,
     "LED_GREEN" : 101,
     "BUZZER" : 102,
+    "MIN" : 103,
+    "MAX" : 104,
 }
 
 # Récupère la clé à partir de la valeur du dictionnaire
