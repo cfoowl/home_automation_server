@@ -13,60 +13,59 @@ router = APIRouter()
 
 # Detected Devices
 @router.get("/detected-devices")
-# current_user = Depends(get_current_user)
-def get_detected_devices(db: Session = Depends(get_db)):
+def get_detected_devices(db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     return get_all_detected_devices_endpoint(db=db)
 
 @router.post("/detected-devices/scan")
-def scan_new_devices(db: Session = Depends(get_db)):
+def scan_new_devices(db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     return start_new_scan_endpoint(db=db)
 
 @router.delete("/detected-device/{detected_device_id}")
-def delete_detected_device(detected_device_id: int, db: Session = Depends(get_db)):
+def delete_detected_device(detected_device_id: int, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     return delete_detected_device_by_id_endpoint(db=db, detected_device_id=detected_device_id)
 
 # Devices
 @router.post("/devices")
-def create_device(detected_device_id: int, name: str,  db: Session = Depends(get_db)):
+def create_device(detected_device_id: int, name: str,  db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     return create_device_endpoint(db=db, name=name, detected_device_id=detected_device_id)
 
 @router.get("/devices")
-def get_all_devices(db: Session = Depends(get_db)):
+def get_all_devices(db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     return get_all_devices_endpoint(db=db)
 
 @router.get("/device/{device_id}")
-def get_device_by_id(device_id: int, db: Session = Depends(get_db)):
+def get_device_by_id(device_id: int, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     return get_device_by_id_endpoint(db=db, device_id=device_id)
 
 @router.delete("/device/{device_id}")
-def delete_device_by_id(device_id: int, db: Session = Depends(get_db)):
+def delete_device_by_id(device_id: int, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     return delete_device_by_id_endpoint(db=db, device_id=device_id)
 
 @router.put("/device/{device_id}")
-def update_device(device_id: int, name: str, db: Session = Depends(get_db)):
+def update_device(device_id: int, name: str, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     return update_device_by_id_endpoint(db=db, device_id=device_id, name=name)
 
 # Sensor Data
 @router.get("/device/{device_id}/sensor_data/{limit}")
-def get_sensor_data(device_id: int, limit: int, db: Session = Depends(get_db)):
+def get_sensor_data(device_id: int, limit: int, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     return get_last_sensor_data_entries_by_id(db=db, device_id=device_id, limit=limit)
 
 # Device actions
 @router.get("/device/{device_id}/actions")
-def get_actions(device_id: int, db: Session = Depends(get_db)):
+def get_actions(device_id: int, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     return get_device_actions_by_id_endpoint(db=db, device_id=device_id)
 
 @router.post("/device/{device_id}/action/{action_id}")
-def post_action(device_id: int, action_id: int, db: Session = Depends(get_db)):
+def post_action(device_id: int, action_id: int, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     return post_device_actions_by_id_endpoint(db=db, device_id=device_id, action_id=action_id)
 
 
 # Device logs
 @router.get("/device/{device_id}/logs/{limit}")
-def get_logs(device_id: int, limit: int = 100, db: Session = Depends(get_db)):
+def get_logs(device_id: int, limit: int = 100, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     return get_device_logs_by_id_endpoint(db=db, device_id=device_id, limit=limit)
 
-# Authentification
+# Authentication
 
 @router.post("/login")
 def login(username: str, password: str, db: Session = Depends(get_db)):
@@ -78,15 +77,15 @@ def create_user(username: str, password: str, is_admin: bool, db: Session = Depe
 
 # Automation
 @router.delete("/automation/{automation_id}")
-def delete_automation(automation_id: int, db: Session = Depends(get_db)):
+def delete_automation(automation_id: int, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     return delete_automation_by_id_endpoint(db=db, automation_id=automation_id)
 
 @router.get("/automations/")
-def get_all_automations(db: Session = Depends(get_db)):
-    return get_all_automations(db=db)
+def get_all_automations(db: Session = Depends(get_db), current_user = Depends(get_current_user)):
+    return get_all_automations_endpoint(db=db)
 
 @router.get("/automation/{automation_id}")
-def get_automation_by_id(automation_id = int, db: Session = Depends(get_db)):
+def get_automation_by_id(automation_id: int, db: Session = Depends(get_db)):
     return get_automation_by_id_endpoint(db=db, automation_id=automation_id)
 
 @router.post("/automation/{sensor_id}/{sensor_type}/{condition_type}/{condition_operator}/{condition_value}/{actuator_id}/{action_id}")

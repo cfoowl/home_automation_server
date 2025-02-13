@@ -7,7 +7,7 @@ from app.services.modbus import Client
 def create_device_endpoint(db: Session, detected_device_id: int, name: str):
     detected_device = db.query(DetectedDevices).filter(DetectedDevices.id == detected_device_id).first()
     ip = detected_device.ip
-    new_device = Device(name=name, ip=ip, type=detected_device.type, device_metadata=detected_device.device_metadata)
+    new_device = Device(name=name, ip=ip, type=detected_device.type, device_metadata=detected_device.device_metadata, is_alive=True)
     
     global client_list
     client_list |= {ip : Client(ip)}

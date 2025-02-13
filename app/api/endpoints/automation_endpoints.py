@@ -15,7 +15,7 @@ def get_all_automations_endpoint(db: Session):
 def get_automation_by_id_endpoint(db: Session, automation_id: int):
     return db.query(Automation).filter(Automation.id == automation_id).first()
 
-def create_automation_endpoint(db: Session, sensor_id: int, sensor_type: str, condition_type: str, condition_operator: str, condition_value, actuator_id: int, action_id: int):
+def create_automation_endpoint(db: Session, sensor_id: int, sensor_type: str, condition_type: str, condition_operator: str, condition_value: int, actuator_id: int, action_id: int):
     condition = {
         "type" : condition_type,
         "operator" : condition_operator,

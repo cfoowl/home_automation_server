@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, JSON, DateTime
+from sqlalchemy import Column, Integer, String, JSON, DateTime, Boolean
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from app.config.settings import Base
@@ -16,6 +16,7 @@ class Device(Base):
     device_metadata = Column(JSON, default={})
     registered_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
     last_seen = Column(DateTime(timezone=True), default=datetime.now)
+    is_alive = Column(Boolean, nullable=False)
     # Relationships
     sensor_data = relationship("SensorData", back_populates="device", cascade="all, delete")
     log = relationship("DeviceLog", back_populates="device", cascade="all, delete")
