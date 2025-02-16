@@ -4,7 +4,7 @@
 Le script d'installation est conçu pour une installation minimale de Raspberry Pi OS Lite (64 bits). Le but est d'effectuer l'installation directement après avoir flashé l'OS sur la carte SD et avoir démarré le raspberry pour la première fois.
 
 ```
-sudo apt install git
+sudo apt install git -y
 cd ~
 git clone https://github.com/cfoowl/home_automation_server.git
 cd home_automation_server
