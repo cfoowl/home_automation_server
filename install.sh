@@ -6,7 +6,7 @@ set -e # Arrête l'exécution en cas d'erreur
 
 echo "Installation des dépendances"
 
-sudo apt udpate
+sudo apt update
 sudo apt install -y postgresql libpq-dev python3-dev build-essential libpq-dev python3-pip python3-venv
 
 echo "Dépendances installées avec succès"
@@ -48,7 +48,7 @@ wifi_status=$(rfkill list wifi | grep -i "Soft blocked: yes")
 
 if [[ -n "$wifi_status" ]]; then
     echo "Le Wi-Fi est désactivé. Réactivation en cours..."
-    rfkill unblock wifi
+    sudo rfkill unblock wifi
     echo "Wi-Fi réactivé."
 else
     echo "Le Wi-Fi est déjà activé."
