@@ -1,20 +1,16 @@
 # home_automation_server
 
 ## Installation
-Prérequis
-```bash
-apt install libpq-dev
+Le script d'installation est conçu pour une installation minimale de Raspberry Pi OS Lite (64 bits). Le but est d'effectuer l'installation directement après avoir flashé l'OS sur la carte SD et avoir démarré le raspberry pour la première fois.
+
 ```
-Mise en place de l'environnement
-```bash
-git clone git@github.com:cfoowl/home_automation_server.git
+sudo apt install git
+cd ~
+git clone https://github.com/cfoowl/home_automation_server.git
 cd home_automation_server
-python -m venv .venv
-source /.venv/bin/activate
-pip install -r requirement.txt
-python init_db.py
+./install.sh
 ```
-## Lancement
+## Utilisation du serveur
 ```bash
 ./main
 ```
